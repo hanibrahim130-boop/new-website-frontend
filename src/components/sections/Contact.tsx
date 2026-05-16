@@ -93,7 +93,7 @@ export default function Contact() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const msg = `Hi, I'm ${formData.name} from ${formData.businessName}. I'm interested in ${formData.service}. ${formData.message}`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
+    window.open(`https://wa.me/+96176171003?text=${encodeURIComponent(msg)}`, "_blank");
   };
 
   return (
@@ -192,7 +192,7 @@ export default function Contact() {
                   </span>
                 </button>
                 <a
-                  href="https://wa.me/"
+                  href="https://wa.me/+96176171003"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="contact-form-el flex items-center justify-center gap-2 border border-white/20 text-white px-8 py-4 rounded-full text-sm font-semibold hover:border-accent hover:text-accent transition-all duration-300"
