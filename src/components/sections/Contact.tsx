@@ -6,6 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
+  const bgTextRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
     name: "",
     businessName: "",
@@ -82,6 +83,19 @@ export default function Contact() {
         },
       }
     );
+
+    if (bgTextRef.current) {
+      gsap.fromTo(bgTextRef.current, { x: "-5%" }, {
+        x: "10%",
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1,
+        },
+      });
+    }
   }, []);
 
   const handleChange = (
@@ -98,7 +112,13 @@ export default function Contact() {
 
   return (
     <section ref={sectionRef} id="contact" className="bg-dark text-white relative overflow-hidden">
-      <div className="py-32 px-6 md:px-10">
+      <div
+        ref={bgTextRef}
+        className="absolute top-1/3 left-0 whitespace-nowrap text-[clamp(6rem,18vw,16rem)] font-black uppercase leading-none tracking-[-0.04em] text-white/[0.02] select-none pointer-events-none"
+      >
+        LET'S TALK
+      </div>
+      <div className="py-40 md:py-48 px-6 md:px-10 relative z-10">
         <div className="max-w-[1400px] mx-auto">
           <div className="text-center mb-20">
             <p className="contact-title text-accent text-sm font-bold uppercase tracking-[0.2em] mb-4">

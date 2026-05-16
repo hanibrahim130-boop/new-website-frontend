@@ -11,6 +11,8 @@ import Process from "./components/sections/Process";
 import Packages from "./components/sections/Packages";
 import Contact from "./components/sections/Contact";
 import Footer from "./components/layout/Footer";
+import StarOrnament from "./components/StarOrnament";
+import SectionDivider from "./components/SectionDivider";
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -24,13 +26,17 @@ function App() {
     <>
       {!loaded && <Loader onComplete={handleLoadComplete} />}
       <Navbar />
+      <StarOrnament />
       <main>
         <Hero />
         <About />
+        <SectionDivider text="WHAT WE BUILD" direction="left" />
         <Services />
         <Portfolio />
+        <SectionDivider text="OUR SERVICES" direction="right" />
         <Industries />
         <Process />
+        <SectionDivider text="OUR EDGE" direction="left" />
         <Packages />
         <Contact />
       </main>

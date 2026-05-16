@@ -5,14 +5,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const industries = [
-  { name: "Restaurants & Cafés", icon: "🍽️" },
-  { name: "Beauty Salons", icon: "💇" },
-  { name: "Barbershops", icon: "✂️" },
-  { name: "Clinics", icon: "🏥" },
-  { name: "Gyms & Fitness", icon: "💪" },
-  { name: "Online Stores", icon: "🛒" },
-  { name: "Retail Shops", icon: "🏪" },
-  { name: "Local Services", icon: "🔧" },
+  { name: "Restaurants & Cafés", icon: "🍽️", num: "01" },
+  { name: "Beauty Salons", icon: "💇", num: "02" },
+  { name: "Barbershops", icon: "✂️", num: "03" },
+  { name: "Clinics", icon: "🏥", num: "04" },
+  { name: "Gyms & Fitness", icon: "💪", num: "05" },
+  { name: "Online Stores", icon: "🛒", num: "06" },
+  { name: "Retail Shops", icon: "🏪", num: "07" },
+  { name: "Local Services", icon: "🔧", num: "08" },
 ];
 
 export default function Industries() {
@@ -24,8 +24,8 @@ export default function Industries() {
 
     const title = sectionRef.current.querySelector(".ind-title");
     if (title) {
-      gsap.fromTo(title, { y: 80, opacity: 0 }, {
-        y: 0, opacity: 1, duration: 1, ease: "power3.out",
+      gsap.fromTo(title, { y: 100, opacity: 0 }, {
+        y: 0, opacity: 1, duration: 1.2, ease: "power3.out",
         scrollTrigger: { trigger: title, start: "top 85%" },
       });
     }
@@ -52,11 +52,27 @@ export default function Industries() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: () => `+=${scrollWidth}`,
-          scrub: 1,
+          end: () => `+=${scrollWidth * 1.2}`,
+          scrub: 1.5,
           pin: true,
           anticipatePin: 1,
         },
+      });
+
+      const cards = track.querySelectorAll(".ind-card");
+      cards.forEach((card, i) => {
+        gsap.fromTo(card,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1, y: 0, duration: 0.6,
+            scrollTrigger: {
+              trigger: sectionRef.current!,
+              start: () => `top+=${i * 60} top`,
+              end: () => `top+=${i * 60 + 150} top`,
+              scrub: 1,
+            },
+          }
+        );
       });
     });
 
@@ -74,8 +90,8 @@ export default function Industries() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-32 bg-light relative overflow-hidden">
-      <div className="px-6 md:px-10 mb-16">
+    <section ref={sectionRef} className="py-40 bg-light relative overflow-hidden">
+      <div className="px-6 md:px-10 mb-20">
         <div className="max-w-[1400px] mx-auto text-center">
           <h2 className="ind-title text-[clamp(2rem,5vw,4rem)] font-black leading-[1.05] tracking-[-0.03em] uppercase">
             MARKET<br />EXPERTISE
@@ -86,16 +102,17 @@ export default function Industries() {
         </div>
       </div>
 
-      <div ref={trackRef} className="flex gap-4 px-6 md:px-10 md:flex-nowrap flex-wrap justify-center md:justify-start">
+      <div ref={trackRef} className="flex gap-5 px-6 md:px-10 md:flex-nowrap flex-wrap justify-center md:justify-start">
         {industries.map((ind, i) => (
           <div
             key={i}
-            className="ind-card group flex-shrink-0 w-[calc(50%-8px)] md:w-[300px] bg-dark text-white rounded-2xl p-8 flex flex-col justify-between min-h-[220px] hover:bg-dark/90 transition-all duration-500 cursor-default"
+            className="ind-card group flex-shrink-0 w-[calc(50%-10px)] md:w-[320px] bg-dark text-white rounded-2xl p-8 flex flex-col justify-between min-h-[260px] hover:bg-dark/90 transition-all duration-500 cursor-default relative overflow-hidden"
           >
-            <span className="text-4xl mb-6">{ind.icon}</span>
+            <div className="absolute top-4 right-4 text-white/5 text-[3rem] font-black">{ind.num}</div>
+            <span className="text-5xl mb-8">{ind.icon}</span>
             <div>
-              <h3 className="text-lg font-bold uppercase tracking-wide mb-2">{ind.name}</h3>
-              <div className="w-8 h-0.5 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+              <h3 className="text-lg font-bold uppercase tracking-wide mb-3">{ind.name}</h3>
+              <div className="w-10 h-0.5 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
             </div>
           </div>
         ))}

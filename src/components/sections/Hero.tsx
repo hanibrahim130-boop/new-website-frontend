@@ -9,7 +9,7 @@ export default function Hero() {
   const headlineRef = useRef<HTMLDivElement>(null);
   const subRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  const ornamentRef = useRef<HTMLDivElement>(null);
+  const scrollIndicatorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const tl = gsap.timeline({ delay: 2.4 });
@@ -37,35 +37,48 @@ export default function Hero() {
       tl.to(ctaRef.current, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, "-=0.3");
     }
 
-    if (ornamentRef.current) {
-      gsap.fromTo(
-        ornamentRef.current,
-        { scale: 0, rotation: -180, opacity: 0 },
-        { scale: 1, rotation: 0, opacity: 1, duration: 1.2, delay: 2.6, ease: "back.out(1.7)" }
-      );
+    if (scrollIndicatorRef.current) {
+      gsap.set(scrollIndicatorRef.current, { opacity: 0, y: 20 });
+      tl.to(scrollIndicatorRef.current, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, "-=0.2");
+    }
 
-      gsap.to(ornamentRef.current, {
-        y: -100,
-        scale: 0.6,
+    if (headlineRef.current && sectionRef.current) {
+      gsap.to(headlineRef.current, {
+        y: -150,
+        opacity: 0,
         ease: "none",
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: "bottom top",
+          end: "80% top",
           scrub: 1,
         },
       });
     }
 
-    if (headlineRef.current) {
-      gsap.to(headlineRef.current, {
+    if (subRef.current && sectionRef.current) {
+      gsap.to(subRef.current, {
         y: -80,
-        opacity: 0.3,
+        opacity: 0,
         ease: "none",
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top top",
-          end: "bottom top",
+          start: "20% top",
+          end: "70% top",
+          scrub: 1,
+        },
+      });
+    }
+
+    if (ctaRef.current && sectionRef.current) {
+      gsap.to(ctaRef.current, {
+        y: -40,
+        opacity: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "30% top",
+          end: "70% top",
           scrub: 1,
         },
       });
@@ -84,25 +97,20 @@ export default function Hero() {
     <section
       ref={sectionRef}
       id="home"
-      className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden bg-light"
+      className="relative min-h-[110vh] flex flex-col items-center justify-center px-6 overflow-hidden bg-light"
     >
       <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-accent/20 rounded-full blur-[150px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-
-      <div ref={ornamentRef} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0">
-        <svg width="120" height="180" viewBox="0 0 120 180" fill="none" className="opacity-20">
-          <path d="M60 0 L65 70 L120 90 L65 110 L60 180 L55 110 L0 90 L55 70 Z" fill="#bbb" />
-        </svg>
-      </div>
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-accent/10 rounded-full blur-[120px] translate-x-1/3 translate-y-1/3 pointer-events-none" />
 
       <div className="relative z-10 text-center max-w-[1100px] mx-auto">
         <div ref={headlineRef} className="mb-8" style={{ perspective: "1000px" }}>
           <div className="hero-line overflow-hidden">
-            <h1 className="text-[clamp(2.5rem,8vw,7rem)] font-black leading-[0.9] tracking-[-0.04em] uppercase">
+            <h1 className="text-[clamp(3rem,10vw,8rem)] font-black leading-[0.9] tracking-[-0.04em] uppercase">
               DIGITAL
             </h1>
           </div>
           <div className="hero-line overflow-hidden">
-            <h1 className="text-[clamp(2.5rem,8vw,7rem)] font-black leading-[0.9] tracking-[-0.04em] uppercase">
+            <h1 className="text-[clamp(3rem,10vw,8rem)] font-black leading-[0.9] tracking-[-0.04em] uppercase">
               PRESENCE.
             </h1>
           </div>
@@ -110,7 +118,7 @@ export default function Hero() {
 
         <div ref={subRef} className="max-w-[600px] mx-auto mb-10">
           <p className="text-base md:text-lg text-dark/60 leading-relaxed">
-            I design modern websites, manage social media, create content, and build digital marketing strategies for restaurants, salons, clinics, shops, and local businesses.
+            We are a digital agency for local businesses who see design and digital presence as their competitive advantage. From websites to social media, we build brands where aesthetics meet real results.
           </p>
         </div>
 
@@ -135,10 +143,12 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-dark/30">
-          <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
-        </svg>
+      <div ref={scrollIndicatorRef} className="absolute bottom-10 left-1/2 -translate-x-1/2">
+        <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center animate-bounce">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-dark">
+            <path d="M7 13l5 5 5-5" />
+          </svg>
+        </div>
       </div>
     </section>
   );
