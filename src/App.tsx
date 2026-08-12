@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
+  ArrowDown,
   ArrowDownRight,
   ArrowUpRight,
   Bot,
-  ChevronRight,
+  Circle,
   Code2,
   Cpu,
   Menu,
@@ -19,56 +20,59 @@ import { useLenis } from "./hooks/useLenis";
 import { AgentPlayground } from "./components/AgentPlayground";
 import { CaseStudyPage } from "./components/CaseStudyPage";
 import { ClientPortal } from "./components/ClientPortal";
-import { QvoSculpture } from "./components/QvoSculpture";
-import { ChapterHandoff } from "./components/ChapterHandoff";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const capabilities = [
+const systems = [
   {
-    number: "01",
-    icon: <Sparkles size={20} strokeWidth={1.7} />,
-    title: "Web that performs",
-    text: "Flagship brand sites and conversion systems that make your value impossible to ignore.",
-    tags: ["Strategy", "Design systems", "Commerce"],
+    index: "01",
+    title: "Web experiences",
+    detail: "Flagship websites that make a business feel inevitable before the first sales call.",
+    label: "Brand / conversion / commerce",
+    icon: <Sparkles size={19} strokeWidth={1.5} />,
+    accent: "coral",
   },
   {
-    number: "02",
-    icon: <Code2 size={20} strokeWidth={1.7} />,
-    title: "Products people use",
-    text: "Useful applications that turn complex operations into an advantage your team can feel.",
-    tags: ["Web apps", "MVPs", "Dashboards"],
+    index: "02",
+    title: "Product applications",
+    detail: "Purpose-built tools that turn scattered operations into one clear interface.",
+    label: "Product / workflow / data",
+    icon: <Code2 size={19} strokeWidth={1.5} />,
+    accent: "ivory",
   },
   {
-    number: "03",
-    icon: <Bot size={20} strokeWidth={1.7} />,
-    title: "Agents that work",
-    text: "Practical AI agents that qualify, support, report, and move work forward around the clock.",
-    tags: ["Automation", "AI agents", "Integrations"],
+    index: "03",
+    title: "Intelligent agents",
+    detail: "Practical AI systems that handle the routine and surface the work that deserves people.",
+    label: "Agents / automation / integrations",
+    icon: <Bot size={19} strokeWidth={1.5} />,
+    accent: "violet",
   },
 ];
 
 const projects = [
   {
-    type: "Product platform",
+    number: "01",
+    category: "OPERATING PLATFORM",
     title: "Velocity, without the drag.",
-    body: "An operating platform that turns scattered activity into a single decision layer.",
-    className: "project-card--velocity",
-    label: "V/01",
+    detail: "A decision layer that turns scattered activity into visible momentum.",
+    href: "/case-studies/velocity",
+    type: "velocity",
   },
   {
-    type: "AI workforce",
+    number: "02",
+    category: "AI WORKFORCE",
     title: "Service that never sleeps.",
-    body: "An always-on agent system built to qualify enquiries and create momentum.",
-    className: "project-card--agent",
-    label: "A/24",
+    detail: "An always-on agent system that makes every worthy enquiry go somewhere useful.",
+    href: "/case-studies/relay",
+    type: "relay",
   },
 ];
 
 const process = [
-  ["01", "Align", "We isolate the commercial opportunity worth building around."],
-  ["02", "Architect", "We design the experience, data, and automation as one system."],
-  ["03", "Accelerate", "We launch fast, learn from behaviour, then compound the gains."],
+  ["01", "Find the signal", "We define the commercial shift that will make the rest of the work matter."],
+  ["02", "Design the field", "We unite the brand surface, product flow, and operating logic in one coherent system."],
+  ["03", "Set it in motion", "We ship, learn from real behaviour, and improve the parts that compound."],
 ];
 
 function App() {
@@ -83,85 +87,85 @@ function App() {
     const ctx = gsap.context(() => {
       const intro = gsap.timeline({ defaults: { ease: "power4.out" } });
       intro
-        .from(".site-nav", { y: -28, opacity: 0, duration: 0.9 })
-        .from(".hero-eyebrow", { y: 24, opacity: 0, duration: 0.7 }, "-=0.45")
-        .from(".hero-title .line", { yPercent: 112, duration: 1.1, stagger: 0.1 }, "-=0.35")
-        .from(".hero-copy, .hero-actions", { y: 20, opacity: 0, duration: 0.7, stagger: 0.12 }, "-=0.55")
-        .from(".qvo-sculpture", { scale: 0.9, opacity: 0, duration: 1.25 }, "<0.1")
-        .from(".hero-meta", { y: 16, opacity: 0, duration: 0.65 }, "-=0.4");
+        .from(".orbit-nav", { y: -24, opacity: 0, duration: 0.8 })
+        .from(".orbit-hero__eyebrow", { y: 18, opacity: 0, duration: 0.7 }, "-=0.38")
+        .from(".orbit-hero__title .line", { yPercent: 104, duration: 1.02, stagger: 0.11 }, "-=0.34")
+        .from(".orbit-hero__summary, .orbit-hero__actions", { y: 18, opacity: 0, duration: 0.64, stagger: 0.1 }, "-=0.58")
+        .from(".signal-field", { scale: 0.9, opacity: 0, duration: 1.5, ease: "power3.out" }, "<0.05")
+        .from(".orbit-hero__meta", { y: 14, opacity: 0, duration: 0.55 }, "-=0.6");
 
-      gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((element) => {
+      gsap.utils.toArray<HTMLElement>("[data-orbit-reveal]").forEach((element) => {
         gsap.fromTo(
           element,
-          { y: 42, opacity: 0 },
+          { y: 36, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            duration: 0.9,
+            duration: 0.82,
             ease: "power3.out",
-            scrollTrigger: {
-              trigger: element,
-              start: "top 88%",
-              once: true,
-            },
+            scrollTrigger: { trigger: element, start: "top 88%", once: true },
           },
         );
       });
 
-      gsap.utils.toArray<HTMLElement>("[data-handoff]").forEach((handoff) => {
-        const planes = handoff.querySelectorAll(".chapter-handoff__plane");
-        const line = handoff.querySelector(".chapter-handoff__line");
-        gsap.fromTo(planes, { scaleX: 0, transformOrigin: "left center" }, {
-          scaleX: 1,
-          duration: 1.05,
-          stagger: 0.12,
-          ease: "power3.inOut",
-          scrollTrigger: { trigger: handoff, start: "top 86%", once: true },
-        });
-        gsap.fromTo(line, { y: 22, opacity: 0 }, {
-          y: 0,
-          opacity: 1,
-          duration: 0.65,
-          ease: "power3.out",
-          scrollTrigger: { trigger: handoff, start: "top 75%", once: true },
-        });
-      });
-
-      gsap.utils.toArray<HTMLElement>(".parallax-shape").forEach((shape, index) => {
-        gsap.to(shape, {
-          yPercent: index % 2 ? -18 : 15,
-          ease: "none",
+      const media = gsap.matchMedia();
+      media.add("(min-width: 900px) and (prefers-reduced-motion: no-preference)", () => {
+        const cards = gsap.utils.toArray<HTMLElement>(".orbit-system-card");
+        const timeline = gsap.timeline({
           scrollTrigger: {
-            trigger: shape.closest("section") ?? shape,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.2,
+            trigger: ".orbit-systems",
+            start: "top top",
+            end: "+=1700",
+            scrub: 0.85,
+            pin: true,
+            anticipatePin: 1,
           },
         });
+        timeline
+          .fromTo(".orbit-systems__title", { yPercent: 0 }, { yPercent: -30, duration: 0.24 }, 0)
+          .fromTo(cards[0], { yPercent: 58, rotate: -7 }, { yPercent: 0, rotate: 0, duration: 0.25 }, 0.05)
+          .fromTo(cards[1], { yPercent: 80, rotate: 5 }, { yPercent: 0, rotate: 0, duration: 0.25 }, 0.28)
+          .fromTo(cards[2], { yPercent: 98, rotate: -3 }, { yPercent: 0, rotate: 0, duration: 0.25 }, 0.51)
+          .to(".orbit-system-stack", { yPercent: -7, duration: 0.18 }, 0.78);
+
+        gsap.to(".orbit-project-title", {
+          xPercent: -10,
+          ease: "none",
+          scrollTrigger: { trigger: ".orbit-projects", start: "top bottom", end: "bottom top", scrub: 1 },
+        });
       });
 
-      gsap.to(".work-heading", {
-        xPercent: -14,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".work-section",
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
-        },
+      gsap.utils.toArray<HTMLElement>(".orbit-project-card").forEach((card, index) => {
+        gsap.fromTo(
+          card,
+          { y: 76, opacity: 0, rotate: index ? 3 : -3 },
+          {
+            y: 0,
+            opacity: 1,
+            rotate: 0,
+            duration: 1.05,
+            ease: "power3.out",
+            scrollTrigger: { trigger: card, start: "top 84%", once: true },
+          },
+        );
       });
+
+      const onPointerMove = (event: PointerEvent) => {
+        const rect = root.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width - 0.5;
+        const y = (event.clientY - rect.top) / rect.height - 0.5;
+        root.style.setProperty("--signal-pointer-x", `${x * 18}px`);
+        root.style.setProperty("--signal-pointer-y", `${y * 18}px`);
+      };
+
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
+      return () => {
+        window.removeEventListener("pointermove", onPointerMove);
+        media.revert();
+      };
     }, root);
 
-    const updateCursor = (event: PointerEvent) => {
-      root.style.setProperty("--cursor-x", `${event.clientX}px`);
-      root.style.setProperty("--cursor-y", `${event.clientY}px`);
-    };
-
-    window.addEventListener("pointermove", updateCursor, { passive: true });
-    return () => {
-      window.removeEventListener("pointermove", updateCursor);
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, []);
 
   const closeMenu = () => setMenuOpen(false);
@@ -172,222 +176,174 @@ function App() {
   if (pathname !== "/") return <CaseStudyPage slug="" />;
 
   return (
-    <div className="qvo-app" ref={appRef}>
-      <div className="cursor-glow" aria-hidden="true" />
-      <div className="grain" aria-hidden="true" />
-
-      <header className="site-nav">
-        <a className="wordmark" href="#home" onClick={closeMenu} aria-label="Qvo.tech home">
-          qvo<span>.</span>tech
-        </a>
-        <nav className={menuOpen ? "nav-links nav-links--open" : "nav-links"} aria-label="Primary navigation">
-          <a href="#work" onClick={closeMenu}>Work</a>
-          <a href="#capabilities" onClick={closeMenu}>Capabilities</a>
-          <a href="#agents" onClick={closeMenu}>AI systems</a>
-          <a href="#playground" onClick={closeMenu}>Playground</a>
-          <a href="#approach" onClick={closeMenu}>Approach</a>
-          <a href="/portal">Portal</a>
+    <div className="qvo-app orbit-app" ref={appRef}>
+      <div className="orbit-grain" aria-hidden="true" />
+      <header className="orbit-nav">
+        <a className="orbit-wordmark" href="#home" onClick={closeMenu} aria-label="Qvo.tech home">qvo<span>.</span>tech</a>
+        <nav className="orbit-nav__links" aria-label="Primary navigation">
+          <a href="#systems">Systems</a>
+          <a href="#work">Work</a>
+          <a href="#playground">Signal Lab</a>
+          <a href="#approach">Approach</a>
         </nav>
-        <a className="nav-cta" href="#contact">
-          Start a project <ArrowUpRight size={16} />
-        </a>
-        <button
-          className="menu-toggle"
-          type="button"
-          onClick={() => setMenuOpen((open) => !open)}
-          aria-label={menuOpen ? "Close navigation" : "Open navigation"}
-          aria-expanded={menuOpen}
-        >
+        <a className="orbit-nav__cta" href="#contact">Start a project <ArrowUpRight size={15} /></a>
+        <button className="orbit-menu-button" type="button" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? "Close navigation" : "Open navigation"} aria-expanded={menuOpen}>
           {menuOpen ? <X size={21} /> : <Menu size={22} />}
         </button>
       </header>
 
+      <aside className={menuOpen ? "orbit-menu orbit-menu--open" : "orbit-menu"} aria-hidden={!menuOpen}>
+        <div className="orbit-menu__eyebrow"><Circle size={9} fill="currentColor" /> Navigation / 00</div>
+        <div className="orbit-menu__links">
+          <a href="#systems" onClick={closeMenu}>What we make <ArrowDownRight size={20} /></a>
+          <a href="#work" onClick={closeMenu}>Selected work <ArrowDownRight size={20} /></a>
+          <a href="#playground" onClick={closeMenu}>Qvo Signal Lab <ArrowDownRight size={20} /></a>
+          <a href="#approach" onClick={closeMenu}>How we work <ArrowDownRight size={20} /></a>
+          <a href="/portal">Client portal <ArrowUpRight size={20} /></a>
+        </div>
+        <p>Independent technology studio<br />Working globally from the point of view of the work.</p>
+      </aside>
+
       <main>
-        <section className="hero" id="home">
-          <div className="hero-grid" aria-hidden="true" />
-          <div className="hero-glow hero-glow--one" aria-hidden="true" />
-          <div className="hero-glow hero-glow--two" aria-hidden="true" />
-          <div className="hero-content">
-            <div className="hero-eyebrow"><span className="status-dot" /> Independent product &amp; technology studio</div>
-            <h1 className="hero-title">
-              <span className="line">Make the next</span>
-              <span className="line line--accent">move feel inevitable.</span>
+        <section className="orbit-hero" id="home">
+          <div className="orbit-hero__grid" aria-hidden="true" />
+          <div className="orbit-hero__content">
+            <div className="orbit-hero__eyebrow"><i /> Independent product &amp; technology studio</div>
+            <h1 className="orbit-hero__title">
+              <span className="line">From the noise,</span>
+              <span className="line line--italic">a next move.</span>
             </h1>
-            <div className="hero-bottom">
-              <p className="hero-copy">Qvo turns business complexity into decisive digital products, useful tools, and systems your people can actually use.</p>
-              <div className="hero-actions">
-                <a className="button button--lime" href="#contact">Build with Qvo <MoveRight size={18} /></a>
-                <a className="text-link" href="#work">See what we make <ArrowDownRight size={18} /></a>
+            <div className="orbit-hero__lower">
+              <p className="orbit-hero__summary">Qvo gives ambitious businesses the websites, product tools, and intelligent systems that make growth feel less accidental.</p>
+              <div className="orbit-hero__actions">
+                <a className="orbit-button orbit-button--coral" href="#contact">Build with Qvo <MoveRight size={18} /></a>
+                <a className="orbit-arrow-link" href="#systems">Enter the field <ArrowDown size={17} /></a>
               </div>
             </div>
           </div>
-
-          <QvoSculpture />
-
-          <div className="hero-meta">
-            <span>Independent technology studio</span>
-            <span>Global reach — deliberate focus</span>
-            <span className="scroll-cue">Scroll to explore <ArrowDownRight size={16} /></span>
-          </div>
+          <div className="orbit-hero__scene" aria-hidden="true"><QvoSignalField /></div>
+          <div className="orbit-hero__meta"><span>Field notes / 2026</span><span>Web / Products / Agents</span><span>Scroll to resolve <ArrowDownRight size={15} /></span></div>
         </section>
 
-        <section className="signal-bar" aria-label="Qvo capabilities">
-          <div className="signal-track">
-            <span>WEB EXPERIENCES</span><b>✳</b><span>PRODUCT APPLICATIONS</span><b>✳</b><span>AI AGENTS</span><b>✳</b><span>WORKFLOW AUTOMATION</span><b>✳</b>
-            <span>WEB EXPERIENCES</span><b>✳</b><span>PRODUCT APPLICATIONS</span><b>✳</b><span>AI AGENTS</span><b>✳</b><span>WORKFLOW AUTOMATION</span><b>✳</b>
+        <section className="orbit-statement" id="systems">
+          <div className="orbit-statement__marker">01 — SIGNAL / RESOLUTION</div>
+          <div className="orbit-statement__body" data-orbit-reveal>
+            <p>Most businesses do not need more digital surface area.</p>
+            <h2>They need a <em>clearer field</em><br />to move through.</h2>
           </div>
+          <div className="orbit-statement__foot" data-orbit-reveal><span>Qvo finds the leverage in a business, then makes it visible, usable, and repeatable.</span><i /></div>
         </section>
 
-        <ChapterHandoff number="01 / 05" label="A clearer system" tone="paper" />
-
-        <section className="intro-section section-shell chapter chapter--paper" id="capabilities">
-          <div className="section-marker" data-reveal><span>( 01 )</span><span>What we build</span></div>
-          <div className="intro-grid">
-            <h2 data-reveal>Technology should feel <em>inevitable.</em></h2>
-            <p className="intro-copy" data-reveal>We make the visible layer your customers remember and the operating layer your business depends on. Strategy, design, and engineering stay in the same room until the work holds together.</p>
+        <section className="orbit-systems" aria-label="Qvo systems">
+          <div className="orbit-systems__header section-shell">
+            <span className="orbit-kicker">02 / WHAT WE BUILD</span>
+            <h2 className="orbit-systems__title">One studio.<br /><em>Three ways forward.</em></h2>
           </div>
-          <div className="capability-grid">
-            {capabilities.map((capability) => (
-              <article className="capability-card" data-reveal key={capability.number}>
-                <div className="capability-top"><span>{capability.number}</span><div className="capability-icon">{capability.icon}</div></div>
-                <h3>{capability.title}</h3>
-                <p>{capability.text}</p>
-                <div className="tag-row">{capability.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
-                <span className="card-arrow"><ArrowUpRight size={20} /></span>
+          <div className="orbit-system-stack section-shell">
+            {systems.map((system) => (
+              <article className={`orbit-system-card orbit-system-card--${system.accent}`} key={system.index}>
+                <div className="orbit-system-card__top"><span>{system.index}</span><span>{system.label}</span><span className="orbit-system-card__icon">{system.icon}</span></div>
+                <div className="orbit-system-card__middle"><h3>{system.title}</h3><p>{system.detail}</p></div>
+                <div className="orbit-system-card__visual" aria-hidden="true"><i /><b /><em /></div>
+                <span className="orbit-system-card__arrow"><ArrowUpRight size={22} /></span>
               </article>
             ))}
           </div>
         </section>
 
-        <ChapterHandoff number="02 / 05" label="Proof, not polish" tone="ink" />
-
-        <section className="work-section chapter chapter--ink" id="work">
-          <div className="work-heading" aria-hidden="true">Selected <span>leverage</span></div>
-          <div className="work-intro section-shell">
-            <div className="section-marker" data-reveal><span>( 02 )</span><span>Designed for traction</span></div>
-            <p data-reveal>We do not create digital decoration. We design decisive interfaces and operational tools for businesses with something at stake.</p>
+        <section className="orbit-projects" id="work">
+          <div className="orbit-project-title" aria-hidden="true">Selected <em>momentum</em></div>
+          <div className="section-shell orbit-projects__intro" data-orbit-reveal>
+            <span className="orbit-kicker">03 / WORK WITH WEIGHT</span>
+            <p>Designed for the place where strategy ends and useful work begins.</p>
           </div>
-          <div className="project-grid section-shell">
+          <div className="section-shell orbit-project-grid">
             {projects.map((project) => (
-              <article className={`project-card ${project.className}`} data-reveal key={project.label}>
-                <div className="project-top"><span>{project.type}</span><span>{project.label}</span></div>
-                <div className="project-visual" aria-hidden="true">
-                  {project.label === "V/01" ? <VelocityVisual /> : <AgentVisual />}
-                </div>
-                <div className="project-copy"><h3>{project.title}</h3><p>{project.body}</p></div>
-                <a className="project-footer" href={project.label === "V/01" ? "/case-studies/velocity" : "/case-studies/relay"}><span>Explore case study</span><ArrowUpRight size={20} /></a>
-              </article>
+              <a className={`orbit-project-card orbit-project-card--${project.type}`} href={project.href} key={project.number}>
+                <div className="orbit-project-card__top"><span>{project.category}</span><span>{project.number} / 02</span></div>
+                <ProjectPlane type={project.type} />
+                <div className="orbit-project-card__copy"><h3>{project.title}</h3><p>{project.detail}</p></div>
+                <div className="orbit-project-card__footer"><span>Explore case study</span><ArrowUpRight size={19} /></div>
+              </a>
             ))}
           </div>
         </section>
 
-        <ChapterHandoff number="03 / 05" label="Systems in motion" tone="blue" />
-
-        <section className="agent-section chapter chapter--blue" id="agents">
-          <div className="parallax-shape agent-shape" aria-hidden="true" />
-          <div className="section-shell agent-layout">
-            <div className="agent-copy-block">
-              <div className="section-marker section-marker--light" data-reveal><span>( 03 )</span><span>AI systems</span></div>
-              <h2 data-reveal>Let the routine <em>run itself.</em></h2>
-              <p data-reveal>We apply intelligent automation where it earns its place: clearing repetitive work, making handoffs cleaner, and giving people more time for judgment, relationships, and decisions.</p>
-              <a className="text-link text-link--light" href="#contact" data-reveal>Design your agent layer <ArrowUpRight size={18} /></a>
-            </div>
-            <div className="agent-console" data-reveal>
-              <div className="console-bar"><span className="console-brand"><Cpu size={15} /> QVO/CORE</span><span className="console-live"><i /> live</span></div>
-              <div className="console-body">
-                <div className="console-left">
-                  <p>ORCHESTRATION LAYER</p>
-                  <div className="node node--active"><Bot size={16} /><span>Lead agent</span><b>98%</b></div>
-                  <div className="node"><Network size={16} /><span>CRM sync</span><b>live</b></div>
-                  <div className="node"><Zap size={16} /><span>Follow-up flow</span><b>+24</b></div>
-                </div>
-                <div className="console-main">
-                  <div className="console-ring"><span>24/7</span><small>ACTIVE</small></div>
-                  <div className="console-stats"><div><span>1,248</span><small>tasks cleared</small></div><div><span>03:42</span><small>response time</small></div></div>
-                </div>
-              </div>
-              <div className="console-log"><span><i /> intent detected</span><span>routed to sales agent</span><span>opportunity qualified</span></div>
+        <section className="orbit-agent-intro">
+          <div className="orbit-agent-intro__field" aria-hidden="true"><span /><span /><span /></div>
+          <div className="section-shell orbit-agent-intro__content">
+            <span className="orbit-kicker" data-orbit-reveal>04 / INTELLIGENT OPERATIONS</span>
+            <h2 data-orbit-reveal>The routine is <em>not</em><br />the reason you hired people.</h2>
+            <div className="orbit-agent-intro__bottom" data-orbit-reveal>
+              <p>Qvo builds AI systems where they earn their place: routing requests, preparing context, connecting tools, and returning time to human judgement.</p>
+              <div className="orbit-agent-intro__nodes"><span><Bot size={16} /> Lead layer</span><i /><span><Network size={16} /> Operating data</span><i /><span><Zap size={16} /> Action</span></div>
             </div>
           </div>
         </section>
 
-        <ChapterHandoff number="04 / 05" label="Try the system" tone="paper" />
+        <div className="orbit-lab-wrap"><AgentPlayground /></div>
 
-        <AgentPlayground />
-
-        <section className="proof-section section-shell">
-          <div className="proof-copy" data-reveal>
-            <span className="eyebrow">Made for the team on the other side of the ambition</span>
-            <h2>Serious work.<br /><em>Human energy.</em></h2>
-          </div>
-          <div className="proof-list" data-reveal>
-            <div><span>01</span><p>Strategy, design, and technology in the same room.</p></div>
-            <div><span>02</span><p>Senior attention from first conversation to launch.</p></div>
-            <div><span>03</span><p>Built to evolve with your business, not expire on delivery.</p></div>
-          </div>
-        </section>
-
-        <ChapterHandoff number="05 / 05" label="The way in" tone="ink" />
-
-        <section className="process-section chapter chapter--paper" id="approach">
+        <section className="orbit-approach" id="approach">
           <div className="section-shell">
-            <div className="section-marker" data-reveal><span>( 05 )</span><span>Our way in</span></div>
-            <div className="process-head" data-reveal><h2>Enough process<br />to move <em>fast.</em></h2><p>Clarity is the fastest route to remarkable work. We keep the path visible, the decisions honest, and the focus where it pays.</p></div>
-            <div className="process-grid">
-              {process.map(([number, title, text]) => (
-                <article data-reveal key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p><ChevronRight size={19} /></article>
-              ))}
+            <div className="orbit-approach__head" data-orbit-reveal><span className="orbit-kicker">05 / THE TRAJECTORY</span><h2>Senior thinking.<br /><em>Visible momentum.</em></h2></div>
+            <div className="orbit-approach__grid">
+              {process.map(([number, title, text]) => <article data-orbit-reveal key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p><ChevronMark /></article>)}
             </div>
           </div>
         </section>
 
-        <section className="contact-section" id="contact">
-          <div className="contact-glow" aria-hidden="true" />
-          <div className="section-shell contact-inner">
-            <span className="eyebrow" data-reveal>Make the next move count</span>
-            <h2 data-reveal>Let&apos;s make<br /><em>something inevitable.</em></h2>
-            <div className="contact-bottom" data-reveal>
-              <p>Tell us the shift you are trying to create. We will bring the systems thinking to make it real.</p>
-              <a className="button button--dark" href="mailto:hello@qvo.tech">hello@qvo.tech <ArrowUpRight size={19} /></a>
-            </div>
+        <section className="orbit-contact" id="contact">
+          <div className="orbit-contact__field" aria-hidden="true"><i /><i /><i /></div>
+          <div className="section-shell orbit-contact__content">
+            <span className="orbit-kicker" data-orbit-reveal>06 / START HERE</span>
+            <h2 data-orbit-reveal>Bring the<br /><em>complexity.</em></h2>
+            <div className="orbit-contact__bottom" data-orbit-reveal><p>Tell us about the change you want to create. We will bring the systems thinking to make it tangible.</p><a className="orbit-button orbit-button--paper" href="mailto:hello@qvo.tech">hello@qvo.tech <ArrowUpRight size={19} /></a></div>
           </div>
         </section>
       </main>
 
-      <footer className="site-footer">
-        <a className="wordmark" href="#home">qvo<span>.</span>tech</a>
-        <p>Digital leverage for businesses in motion.</p>
-        <div><span>© 2026 Qvo.tech</span><a href="#home">Back to top <ArrowUpRight size={14} /></a></div>
-      </footer>
+      <footer className="orbit-footer"><a className="orbit-wordmark" href="#home">qvo<span>.</span>tech</a><p>Digital systems for businesses in motion.</p><div><span>© 2026 Qvo.tech</span><a href="/portal">Client portal <ArrowUpRight size={14} /></a></div></footer>
     </div>
   );
 }
 
-function VelocityVisual() {
+function QvoSignalField() {
   return (
-    <div className="velocity-ui">
-      <div className="velocity-sidebar"><span /><span /><span className="is-active" /><span /></div>
-      <div className="velocity-content">
-        <div className="velocity-header"><i /><i /><i /></div>
-        <div className="velocity-kpi"><span>Growth signal</span><b>+82.4%</b><small>Compared to last period <ArrowUpRight size={12} /></small></div>
-        <div className="velocity-chart"><svg viewBox="0 0 290 100" preserveAspectRatio="none"><path d="M0,86 C22,78 26,62 48,71 S78,80 99,53 S124,36 144,53 S167,84 190,53 S216,10 238,32 S267,43 290,6" fill="none" stroke="currentColor" strokeWidth="3" /><path d="M0,86 C22,78 26,62 48,71 S78,80 99,53 S124,36 144,53 S167,84 190,53 S216,10 238,32 S267,43 290,6 V100 H0Z" fill="url(#velocityGradient)" /><defs><linearGradient id="velocityGradient" x1="0" x2="0" y1="0" y2="1"><stop stopColor="currentColor" stopOpacity=".23" /><stop offset="1" stopColor="currentColor" stopOpacity="0" /></linearGradient></defs></svg></div>
-        <div className="velocity-cards"><span /><span /><span /></div>
-      </div>
+    <div className="signal-field">
+      <svg viewBox="0 0 760 760" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="signalCoral" x1="188" y1="159" x2="593" y2="578" gradientUnits="userSpaceOnUse"><stop stopColor="#F5A48D" /><stop offset="1" stopColor="#E76E52" /></linearGradient>
+          <linearGradient id="signalViolet" x1="263" y1="119" x2="560" y2="617" gradientUnits="userSpaceOnUse"><stop stopColor="#A5A2E5" /><stop offset="1" stopColor="#524FAE" /></linearGradient>
+          <radialGradient id="signalGlow" cx="0" cy="0" r="1" gradientTransform="translate(380 380) rotate(90) scale(248)"><stop stopColor="#E76E52" stopOpacity=".35" /><stop offset=".53" stopColor="#5753B7" stopOpacity=".18" /><stop offset="1" stopColor="#09090F" stopOpacity="0" /></radialGradient>
+          <filter id="signalBlur"><feGaussianBlur stdDeviation="18" /></filter>
+        </defs>
+        <circle className="signal-field__glow" cx="380" cy="380" r="252" fill="url(#signalGlow)" />
+        <circle className="signal-field__ghost-ring" cx="380" cy="380" r="284" stroke="#F4EFE8" strokeOpacity=".12" />
+        <circle className="signal-field__ghost-ring signal-field__ghost-ring--inner" cx="380" cy="380" r="178" stroke="#F4EFE8" strokeOpacity=".2" />
+        <ellipse className="signal-field__orbit signal-field__orbit--a" cx="380" cy="380" rx="291" ry="158" stroke="#f28b72" strokeWidth="1.5" />
+        <ellipse className="signal-field__orbit signal-field__orbit--b" cx="380" cy="380" rx="210" ry="310" stroke="#a3a0e2" strokeOpacity=".9" strokeWidth="1.25" />
+        <path className="signal-field__trajectory" d="M163 514C250 535 269 617 394 591C504 568 474 423 594 272" stroke="#F4EFE8" strokeOpacity=".52" strokeWidth="1.2" strokeDasharray="5 9" />
+        <path className="signal-field__q" d="M493.5 380C493.5 442.684 442.684 493.5 380 493.5C317.316 493.5 266.5 442.684 266.5 380C266.5 317.316 317.316 266.5 380 266.5C442.684 266.5 493.5 317.316 493.5 380Z" stroke="#ff5038" strokeWidth="34" />
+        <path className="signal-field__q-tail" d="M454 455L588 589" stroke="#aaa7ff" strokeWidth="34" strokeLinecap="round" />
+        <circle className="signal-field__core" cx="380" cy="380" r="10" fill="#F4EFE8" />
+        <circle className="signal-field__core-pulse" cx="380" cy="380" r="24" stroke="#F4EFE8" strokeOpacity=".65" />
+        <circle className="signal-field__marker signal-field__marker--one" cx="163" cy="514" r="7" fill="#E76E52" />
+        <circle className="signal-field__marker signal-field__marker--two" cx="594" cy="272" r="6" fill="#9A98D8" />
+        <path d="M121 618H263" stroke="#F4EFE8" strokeOpacity=".35" /><path d="M497 151H639" stroke="#F4EFE8" strokeOpacity=".35" />
+      </svg>
+      <div className="signal-field__caption signal-field__caption--one">COORDINATE / 27.422°</div>
+      <div className="signal-field__caption signal-field__caption--two">QVO SIGNAL / ACTIVE</div>
     </div>
   );
 }
 
-function AgentVisual() {
-  return (
-    <div className="agent-visual">
-      <div className="agent-visual-grid" />
-      <div className="agent-visual-orbit agent-visual-orbit--one" /><div className="agent-visual-orbit agent-visual-orbit--two" />
-      <div className="agent-visual-core"><Bot size={31} /></div>
-      <div className="agent-chip agent-chip--one">inbox <b>12</b></div>
-      <div className="agent-chip agent-chip--two">qualified</div>
-      <div className="agent-chip agent-chip--three">CRM <i /></div>
-    </div>
-  );
+function ProjectPlane({ type }: { type: string }) {
+  if (type === "velocity") {
+    return <div className="project-plane project-plane--velocity" aria-hidden="true"><div className="project-plane__side"><i /><i /><i /><i /></div><div className="project-plane__canvas"><div className="project-plane__bar"><span /><span /><span /></div><div className="project-plane__metric"><small>Growth signal</small><b>+82.4%</b><em>Trending with intent</em></div><svg viewBox="0 0 420 140" preserveAspectRatio="none"><path d="M0 124C47 119 39 77 84 85C130 94 128 105 167 68C203 35 223 78 254 72C296 64 320 12 363 40C391 58 396 34 420 14" fill="none" stroke="currentColor" strokeWidth="4" /></svg></div></div>;
+  }
+  return <div className="project-plane project-plane--relay" aria-hidden="true"><div className="project-plane__orbit" /><div className="project-plane__orbit project-plane__orbit--two" /><div className="project-plane__core"><Cpu size={30} /></div><div className="project-plane__node project-plane__node--one">INBOX <b>12</b></div><div className="project-plane__node project-plane__node--two">QUALIFIED</div><div className="project-plane__node project-plane__node--three">CRM <i /></div></div>;
 }
+
+function ChevronMark() { return <span className="orbit-chevron" aria-hidden="true">↗</span>; }
 
 export default App;
