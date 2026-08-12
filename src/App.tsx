@@ -19,7 +19,7 @@ import { useLenis } from "./hooks/useLenis";
 import { AgentPlayground } from "./components/AgentPlayground";
 import { CaseStudyPage } from "./components/CaseStudyPage";
 import { ClientPortal } from "./components/ClientPortal";
-import { QvoIndex } from "./components/QvoIndex";
+import { QvoSculpture } from "./components/QvoSculpture";
 import { ChapterHandoff } from "./components/ChapterHandoff";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -87,7 +87,7 @@ function App() {
         .from(".hero-eyebrow", { y: 24, opacity: 0, duration: 0.7 }, "-=0.45")
         .from(".hero-title .line", { yPercent: 112, duration: 1.1, stagger: 0.1 }, "-=0.35")
         .from(".hero-copy, .hero-actions", { y: 20, opacity: 0, duration: 0.7, stagger: 0.12 }, "-=0.55")
-        .from(".qvo-index", { scale: 0.82, opacity: 0, duration: 1.25 }, "<0.1")
+        .from(".qvo-sculpture", { scale: 0.9, opacity: 0, duration: 1.25 }, "<0.1")
         .from(".hero-meta", { y: 16, opacity: 0, duration: 0.65 }, "-=0.4");
 
       gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((element) => {
@@ -107,10 +107,6 @@ function App() {
           },
         );
       });
-
-      gsap.to(".qvo-index__object", { rotationY: 360, duration: 28, repeat: -1, ease: "none" });
-      gsap.to(".qvo-index__orbit--large", { rotation: 360, duration: 22, repeat: -1, ease: "none" });
-      gsap.to(".qvo-index__orbit--small", { rotation: -360, duration: 15, repeat: -1, ease: "none" });
 
       gsap.utils.toArray<HTMLElement>("[data-handoff]").forEach((handoff) => {
         const planes = handoff.querySelectorAll(".chapter-handoff__plane");
@@ -226,7 +222,7 @@ function App() {
             </div>
           </div>
 
-          <QvoIndex />
+          <QvoSculpture />
 
           <div className="hero-meta">
             <span>Independent technology studio</span>
